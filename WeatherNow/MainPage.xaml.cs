@@ -1,24 +1,49 @@
-﻿namespace WeatherNow
+﻿using WeatherNow.Models;
+using WeatherNow.Services;
+
+namespace WeatherNow
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
 
         public MainPage()
         {
             InitializeComponent();
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+        private async Task Button_Clicked(object sender, EventArgs e)
         {
-            count++;
+            try
+            {
+                if (!string.IsNullOrEmpty(txt_city.Text))
+                {
+                    Weather? forecast = await DataService.getForecast(txt_city.Text);
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
+                    if (forecast != null)
+                    {
+                        string forecast_data = "";
 
-            SemanticScreenReader.Announce(CounterBtn.Text);
+                        forecast_data = $"Latitude: {forecast.lat} \n" +
+                                        $"Longitude: {forecast.lon} \n" +
+                                        $"Sunrise: {forecast.sunrise} \n" +
+                                        $"Sunset: {forecast.sunset} \n" +
+                                        $"Maximum Temperature: {forecast.temp_max} \n" +
+                                        $"Minimum temperature: {forecast.temp_min} \n";
+                    }
+                    else
+                    {
+                        lbl_res.Text = "No forecast data.";
+                    }
+                }
+                else
+                {
+                    lbl_res.Text = "Fill in the city!";
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Ops", ex.Message, "OK");
+            }
         }
     }
 
