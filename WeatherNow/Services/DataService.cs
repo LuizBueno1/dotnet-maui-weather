@@ -5,7 +5,7 @@ namespace WeatherNow.Services
 {
     public class DataService
     {
-        public static async Task<Weather?> getForecast(string city)
+        public static async Task<Weather?> GetForecast(string city)
         {
             Weather? weather = null;
 
@@ -35,8 +35,8 @@ namespace WeatherNow.Services
                         description = (string)sketch["weather"][0]["description"],
                         main = (string)sketch["weather"][0]["main"],
                         temp_min = (double)sketch["main"]["temp_min"],
-                        temp_max = (double)sketch["main"]["temp_min"],
-                        speed = (double)sketch["wind"]["temp_max"],
+                        temp_max = (double)sketch["main"]["temp_max"],
+                        speed = (double)sketch["wind"]["speed"],
                         visibility = (int)sketch["visibility"],
                         sunrise = sunrise.ToString(),
                         sunset = sunset.ToString()

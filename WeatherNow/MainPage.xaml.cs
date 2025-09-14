@@ -11,13 +11,13 @@ namespace WeatherNow
             InitializeComponent();
         }
 
-        private async Task Button_Clicked(object sender, EventArgs e)
+        private async void Button_Clicked(object sender, EventArgs e)
         {
             try
             {
                 if (!string.IsNullOrEmpty(txt_city.Text))
                 {
-                    Weather? forecast = await DataService.getForecast(txt_city.Text);
+                    Weather? forecast = await DataService.GetForecast(txt_city.Text);
 
                     if (forecast != null)
                     {
@@ -29,6 +29,8 @@ namespace WeatherNow
                                         $"Sunset: {forecast.sunset} \n" +
                                         $"Maximum Temperature: {forecast.temp_max} \n" +
                                         $"Minimum temperature: {forecast.temp_min} \n";
+
+                        lbl_res.Text = forecast_data;
                     }
                     else
                     {
