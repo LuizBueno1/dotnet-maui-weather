@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Net;
+using Newtonsoft.Json.Linq;
 using WeatherNow.Models;
 
 namespace WeatherNow.Services
@@ -16,7 +17,16 @@ namespace WeatherNow.Services
 
             using (HttpClient client = new HttpClient())
             {
-                HttpResponseMessage message = await client.GetAsync(url);
+                HttpResponseMessage message;
+
+                try
+                {
+                    message = await client.GetAsync(url);
+                }
+                catch (HttpRequestException ex)
+                {
+                    throw new NoInternetConnectionException("No internet connection.", ex);
+                }
 
                 if (message.IsSuccessStatusCode)
                 {
@@ -43,9 +53,28 @@ namespace WeatherNow.Services
 
                     };
                 }
+                else if(message.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new CityNotFoundException("City not found.");
+                }
+                else
+                {
+                    throw new HttpRequestException($"Unexpected error: {message.StatusCode}");
+                }
             }
 
             return weather;
         }
     }
+
+    public class CityNotFoundException : Exception
+    {
+        public CityNotFoundException(string message) : base(message) { }
+    }
+
+    public class NoInternetConnectionException : Exception
+    {
+        public NoInternetConnectionException(string message, Exception inner) : base(message, inner) { }
+    }
+
 }
