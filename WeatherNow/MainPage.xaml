@@ -16,6 +16,8 @@
 
             <Label x:Name="lbl_res"/>
 
+            <WebView x:Name="wv_map" HeightRequest="500"/>
+
         </VerticalStackLayout>
     </ScrollView>
 

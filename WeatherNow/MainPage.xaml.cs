@@ -35,6 +35,14 @@ namespace WeatherNow
                                         $"Visibility: {forecast.visibility} \n";
 
                         lbl_res.Text = forecast_data;
+
+                        string map = $"https://embed.windy.com/embed.html?" +
+                                      $"type=map&location=coordinates&metricRain=mm&metricTemp=°C" +
+                                      $"&metricWind=km/h&zoom=5&overlay=wind&product=ecmwf&level=surface" +
+                                      $"&lat={forecast.lat.ToString().Replace(",", ".")}&lon={forecast.lon.ToString().Replace(",", ".")}";
+
+                        wv_map.Source = map;
+
                     }
                     else
                     {
