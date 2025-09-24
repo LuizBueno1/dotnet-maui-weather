@@ -80,6 +80,8 @@ namespace WeatherNow
 
                     lbl_coords.Text = local_device;
 
+                    GetCity(local.Latitude, local.Longitude);
+
                 }
                 else
                 {
@@ -104,6 +106,26 @@ namespace WeatherNow
                 await DisplayAlert("Error", ex.Message, "OK");
             }
         }
+
+        private async void GetCity(double lat, double lon)
+        {
+            try
+            {
+                IEnumerable<Placemark> places = await Geocoding.Default.GetPlacemarksAsync(lat, lon);
+
+                Placemark? place = places.FirstOrDefault();
+
+                if (place != null)
+                {
+                    txt_city.Text = place.Locality;
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error: Getting city name", ex.Message, "Ok");
+            }
+        }
+
     }
 
 }
