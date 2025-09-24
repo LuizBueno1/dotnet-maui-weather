@@ -8,8 +8,11 @@
             Padding="30,0"
             Spacing="25">
 
+            <Button Text="My Location" Clicked="Button_Clicked_Location"/>
+            <Label x:Name="lbl_coords" />
+
             <Entry x:Name="txt_city"/>
-            <Button Text="Search" Clicked="Button_Clicked"/>
+            <Button Text="Search Forecast" Clicked="Button_Clicked_Forecast"/>
 
             <Label x:Name="lbl_res"/>
 

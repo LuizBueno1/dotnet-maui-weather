@@ -1,4 +1,5 @@
-﻿using WeatherNow.Models;
+﻿using System;
+using WeatherNow.Models;
 using WeatherNow.Services;
 
 namespace WeatherNow
@@ -11,7 +12,7 @@ namespace WeatherNow
             InitializeComponent();
         }
 
-        private async void Button_Clicked(object sender, EventArgs e)
+        private async void Button_Clicked_Forecast(object sender, EventArgs e)
         {
             try
             {
@@ -59,6 +60,48 @@ namespace WeatherNow
             {
                 await DisplayAlert("Ops", ex.Message, "OK");
                 lbl_res.Text = "Unexpected error.";
+            }
+        }
+
+        private async void Button_Clicked_Location(object sender, EventArgs e)
+        {
+            try
+            {
+                GeolocationRequest geolocation = new GeolocationRequest(
+                                                        GeolocationAccuracy.Medium,
+                                                        TimeSpan.FromSeconds(10));
+
+                Location? local = await Geolocation.Default.GetLocationAsync(geolocation);
+
+                if (local != null)
+                {
+                    string local_device = $"Latitude: {local.Latitude} \n" +
+                                          $"Longitude: {local.Longitude}";
+
+                    lbl_coords.Text = local_device;
+
+                }
+                else
+                {
+                    lbl_coords.Text = "No location";
+                }
+
+            }
+            catch(FeatureNotSupportedException fnsEx)
+            {
+                await DisplayAlert("Error: Device not supported", fnsEx.Message, "OK");
+            }
+            catch(FeatureNotEnabledException fneEx)
+            {
+                await DisplayAlert("Error: Location disabled", fneEx.Message, "OK");
+            }
+            catch (PermissionException pEx)
+            {
+                await DisplayAlert("Error: Location permission", pEx.Message, "OK");
+            }
+            catch(Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "OK");
             }
         }
     }
